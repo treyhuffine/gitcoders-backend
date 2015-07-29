@@ -2,10 +2,10 @@ import express from 'express';
 var router = express.Router();
 
 var routes = function(passport, mongoose) {
-  router.use('/auth/github', passport.authenticate('github'));
-  router.use('/auth/github/callback/',
+  router.get('/auth/github', passport.authenticate('github'));
+  router.get('/auth/callback/github',
     passport.authenticate('github', { failureRedirect: '/' }), function(req, res) {
-    console.log("in");
+    console.log("********************* auth", req.user, "*******************************");
     res.redirect('/');
   });
   router.get('/auth/logout', function(req, res, next) {
@@ -15,7 +15,8 @@ var routes = function(passport, mongoose) {
 
   /* GET home page. */
   router.get('/', (req, res, next) => {
-    res.render('index', { title: 'Express' });
+    console.log(req.user);
+    res.render('index', { thisUserData: req.user });
   });
 
   return router;

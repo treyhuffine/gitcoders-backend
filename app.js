@@ -37,6 +37,11 @@ require('./config/passport')(passport);
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use( (req, user, next) => {
+  console.log("PARAMS", req.body, req.query, req.params);
+  next();
+});
+
 var routes = require('./routes/index')(passport, mongoose);
 app.use('/', routes);
 app.use('/users', users);

@@ -9,30 +9,32 @@ var configAuth = require('./auth');
 module.exports = function(passport) {
 
   // used to serialize the user for the session
-  // passport.serializeUser(function(user, done) {
-  //   done(null, user.id);
-  // });
-
+  passport.serializeUser(function(user, done) {
+    console.log(user);
+    done(null, user.id);
+  });
   // used to deserialize the user
   // passport.deserializeUser(function(id, done) {
   //   User.findById(id, function(err, user) {
   //     done(err, user);
   //   });
   // });
+  passport.deserializeUser(function(user, done) {
+    done(null, user);
+  });
 
   // =========================================================================
   // TWITTER =================================================================
   // =========================================================================
   passport.use(new GithubStrategy({
-      clientID     : configAuth.githubAuth.clientID,
-      clientSecret  : configAuth.githubAuth.clientSecret,
+      clientID        : configAuth.githubAuth.clientID,
+      clientSecret    : configAuth.githubAuth.clientSecret,
       callbackURL     : configAuth.githubAuth.callbackURL
     },
     function(token, tokenSecret, profile, done) {
       // make the code asynchronous
-
+      console.log(profile);
       process.nextTick(function() {
-        console.log("auth", token);
         // User.findOne({ 'twitter.id' : profile.id }, function(err, user) {
         //
         //   // if there is an error, stop everything and return that
@@ -67,13 +69,7 @@ module.exports = function(passport) {
         //     });
         //   }
         // });
-        return done(null, {
-          'login': profile.username,
-          'name': profile.displayName || null,
-          'url': profile.profileUrl,
-          'avatarUrl': profile._json.avatar_url,
-          'type': 'github'
-        });
+        return done(null,profile);
       });
 
   }));
