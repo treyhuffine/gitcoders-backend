@@ -29,8 +29,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
   secret: process.env.SESSION_SECRET_TOKEN,
   saveUninitialized: true,
-  resave: true,
-  cookie: { secure: true, maxAge: 2628000000 * 100 }
+  resave: false
+  // cookie: { secure: true, maxAge: 2628000000 * 100 }
 }));
 
 require('./config/passport')(passport);
