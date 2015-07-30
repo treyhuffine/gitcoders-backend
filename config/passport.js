@@ -10,7 +10,6 @@ module.exports = function(passport) {
 
   // used to serialize the user for the session
   passport.serializeUser(function(user, done) {
-    console.log(user);
     done(null, user.id);
   });
   // used to deserialize the user
@@ -53,7 +52,6 @@ module.exports = function(passport) {
             // set all of the user data that we need
 
             // newUser = profile;
-            console.log("%%%%%%%%%%% new user", newUser);
 
             // var fullSizeImage = profile._json.profile_image_url.replace('_normal', '');
 

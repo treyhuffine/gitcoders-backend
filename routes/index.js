@@ -7,7 +7,6 @@ var routes = function(passport, mongoose) {
   router.get('/auth/github', passport.authenticate('github'));
   router.get('/auth/callback/github',
     passport.authenticate('github', { failureRedirect: '/' }), function(req, res) {
-    console.log("********************* auth", req.user, "*******************************");
     res.redirect('/');
   });
   router.get('/auth/logout', function(req, res, next) {
@@ -17,7 +16,6 @@ var routes = function(passport, mongoose) {
 
   /* GET home page. */
   router.get('/', (req, res, next) => {
-    console.log("root ******",req.user);
     res.render('index', { thisUserData: req.user });
   });
 
