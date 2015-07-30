@@ -1,7 +1,9 @@
-import express from 'express';
-var router = express.Router();
+// import express from 'express';
 
 var routes = function(passport, mongoose) {
+  var express = require('express');
+  var router = express.Router();
+
   router.get('/auth/github', passport.authenticate('github'));
   router.get('/auth/callback/github',
     passport.authenticate('github', { failureRedirect: '/' }), function(req, res) {
@@ -15,7 +17,7 @@ var routes = function(passport, mongoose) {
 
   /* GET home page. */
   router.get('/', (req, res, next) => {
-    console.log(req.user);
+    console.log("root ******",req.user);
     res.render('index', { thisUserData: req.user });
   });
 

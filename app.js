@@ -28,8 +28,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(session({
   secret: process.env.SESSION_SECRET_TOKEN,
-  saveUninitialized: false,
-  resave: false,
+  saveUninitialized: true,
+  resave: true,
   cookie: { secure: true, maxAge: 2628000000 * 100 }
 }));
 
