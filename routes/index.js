@@ -7,7 +7,8 @@ var routes = function(passport, mongoose) {
   router.get('/auth/github', passport.authenticate('github'));
   router.get('/auth/callback/github',
     passport.authenticate('github', { failureRedirect: '/' }), function(req, res) {
-    res.redirect('/');
+    // res.redirect('/');
+    res.json(req.user);
   });
   router.get('/auth/logout', function(req, res, next) {
     req.logout();
