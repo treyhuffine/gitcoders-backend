@@ -10,8 +10,7 @@ module.exports = function(passport) {
 
   // used to serialize the user for the session
   passport.serializeUser( (user, done) => {
-    console.log(user);
-    done(null, user.token);
+    done(null, user.dbID);
   });
   // used to deserialize the user
   passport.deserializeUser( (id, done) => {
