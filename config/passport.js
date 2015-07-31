@@ -9,65 +9,66 @@ var configAuth = require('./auth');
 module.exports = function(passport) {
 
   // used to serialize the user for the session
-  passport.serializeUser(function(user, done) {
-    done(null, user.id);
+  passport.serializeUser( (user, done) => {
+    console.log(user);
+    done(null, user.token);
   });
   // used to deserialize the user
-  passport.deserializeUser(function(id, done) {
-    User.findById(id, function(err, user) {
-      done(err, user);
+  passport.deserializeUser( (id, done) => {
+    User.findById(id, (err, user) => {
+      done(err, use);
     });
   });
-  // passport.deserializeUser(function(user, done) {
-  //   done(null, user);
-  // });
 
-  // =========================================================================
-  // TWITTER =================================================================
-  // =========================================================================
   passport.use(new GithubStrategy({
       clientID        : configAuth.githubAuth.clientID,
       clientSecret    : configAuth.githubAuth.clientSecret,
       callbackURL     : configAuth.githubAuth.callbackURL
     },
-    function(token, tokenSecret, profile, done) {
+    (token, tokenSecret, profile, done) => {
       // make the code asynchronous
-      process.nextTick(function() {
-        User.findOne({ githubID : profile._json.id }, function(err, user) {
+      process.nextTick( () => {
+        User.findOne({ githubID : profile._json.id }, (err, user) => {
 
           // if there is an error, stop everything and return that
           // ie an error connecting to the database
-          if (err)
+          if (err) {
             return done(err);
+          }
 
           // if the user is found then log them in
           if (user) {
-            return done(null, user); // user found, return that user
+            user.token = require('crypto').randomBytes(64).toString('hex');
+            user.save( (err) => {
+              if (err) {
+                throw err;
+              }
+              let userData = {
+                dbID: user.id,
+                username: user.githubData.login,
+                token: user.token
+              }
+              return done(null, userData);
+            });
+            // user found, return that user
           } else {
             // if there is no user, create them
             var newUser = new User();
             newUser.githubID = profile._json.id;
             newUser.githubData = profile._json;
-
-            // set all of the user data that we need
-
-            // newUser = profile;
-
-            // var fullSizeImage = profile._json.profile_image_url.replace('_normal', '');
-
-            // newUser.twitter.id              = profile.id;
-            // newUser.twitter.token           = token;
-            // newUser.twitter.tokenSecret     = tokenSecret;
-            // newUser.twitter.username        = profile.username;
-            // newUser.twitter.displayName     = profile.displayName;
-            // newUser.twitter.profileImageUrl = fullSizeImage;
-            // newUser.twitter.location        = (profile._json.profile_location && profile._json.profile_location.name);
+            newUser.token = require('crypto').randomBytes(64).toString('hex');
 
             // save our user into the database
-            newUser.save(function(err) {
-              if (err)
+            newUser.save( (err) => {
+              if (err) {
                 throw err;
-              return done(null, newUser);
+              }
+              let userData = {
+                dbID: newUser.id,
+                username: newUser.githubData.login,
+                token: newUser.token
+              }
+              return done(null, userData);
             });
           }
         });
