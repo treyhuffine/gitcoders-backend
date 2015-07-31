@@ -8,7 +8,7 @@ var routes = function(passport, mongoose) {
   router.get('/auth/callback/github',
     passport.authenticate('github', { failureRedirect: '/' }), function(req, res) {
     // have a login page where you pull the data then direct to the user from front end
-    res.redirect('http://127.0.0.1:8080/#/git/' + req.user.username);
+    res.redirect('http://127.0.0.1:8080/#/auth/' + req.user.token);
     console.log(req.user);
     // res.redirect('/');
     // res.json(req.user);
