@@ -9,6 +9,8 @@ var routes = function(passport, mongoose) {
     passport.authenticate('github', { failureRedirect: '/' }), function(req, res) {
     // have a login page where you pull the data then direct to the user from front end
     res.redirect('http://127.0.0.1:8080/#/auth/' + req.user.token);
+    // res.redirect('http://127.0.0.1:8080/#/');
+
     console.log(req.user);
     // res.redirect('/');
     // res.json(req.user);
@@ -17,10 +19,17 @@ var routes = function(passport, mongoose) {
     req.logout();
     res.redirect("/");
   });
+  router.get('/currentuser', function(req, res, next) {
+    console.log("get user data", req.user);
+    res.json(req.user);
+  })
 
   /* GET home page. */
   router.get('/', (req, res, next) => {
+    console.log(req.user);
     res.render('index', { currentUserData: req.user });
+    // console.log(req.user);
+    // res.json(req.user)
   });
 
   return router;

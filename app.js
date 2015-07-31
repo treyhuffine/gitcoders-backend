@@ -9,6 +9,7 @@ var configDB = require('./config/database.js');
 var users = require('./routes/users');
 var passport = require('passport');
 var session = require('express-session');
+var cors = require('cors')
 
 var app = express();
 
@@ -36,6 +37,8 @@ app.use(session({
 require('./config/passport')(passport);
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.use(cors());
 
 app.use( (req, user, next) => {
   console.log("PARAMS", req.body, req.query, req.params);
